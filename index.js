@@ -1,9 +1,8 @@
 window.onload = () => {
   const { ipcRenderer } = require('electron');
 
-  function changeInterval() {
-    const interval = document.querySelector('#interval').value;
-    if (!Number(interval)) {
+  function changeInterval(interval, posture) {
+    if (!interval) {
       alert('请输入正确的数字,最小1分钟，最大60分钟');
       return;
     }
@@ -11,8 +10,16 @@ window.onload = () => {
       alert('时间间隔为1到60分钟');
       return;
     }
-    ipcRenderer.send('changeInterval', interval);
+    ipcRenderer.send('changeInterval', { interval, posture });
   }
 
-  document.querySelector('#setInterval').onclick = changeInterval;
+  document.querySelector('#setSitInterval').onclick = () => {
+    const interval = Number(document.querySelector('#sitInterval').value);
+    changeInterval(interval, 'sit');
+  };
+
+  document.querySelector('#setStandInterval').onclick = () => {
+    const interval = Number(document.querySelector('#standInterval').value);
+    changeInterval(interval, 'stand');
+  };
 }
