@@ -11,6 +11,8 @@ window.onload = () => {
       return;
     }
     ipcRenderer.send('changeInterval', { interval, posture });
+
+    alert('修改成功');
   }
 
   document.querySelector('#setSitInterval').onclick = () => {

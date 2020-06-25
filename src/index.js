@@ -2,7 +2,7 @@ const { app, Menu, BrowserWindow, Tray, Notification, ipcMain } = require('elect
 const schema = require('./schema');
 const Store = require('electron-store');
 const store = new Store({ schema }); // 数据存储对象
-const trayIcon = require.resolve('./grassland.png'); // 托盘图标
+const trayIcon = require.resolve('../images/grassland.png'); // 托盘图标
 
 let timer; // 倒计时的定时器
 let tray; // 右上角托盘菜单
@@ -26,7 +26,7 @@ function createWindow() {
   })
 
   // 加载index.html
-  configWin.loadFile('index.html');
+  configWin.loadFile('src/editTime.html');
 
   // 打开开发者工具
   // configWin.webContents.openDevTools();
