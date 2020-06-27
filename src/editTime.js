@@ -24,4 +24,22 @@ window.onload = () => {
     const interval = Number(document.querySelector('#standInterval').value);
     changeInterval(interval, 'stand');
   };
+
+  const noonBreakDom = document.querySelector('.noonBreak');
+  noonBreakDom.querySelector('button').onclick = () => {
+    const inputList = noonBreakDom.querySelectorAll('input');
+    const timeList = [...inputList].map(input => input.value !== '' && input.value.padStart(2, '0'));
+    const timeIsOk = timeList.every((item, idx) => {
+      return item && +item >= 0 && +item <= (idx % 2 === 0 ? 23 : 59);
+    });
+
+    if (timeIsOk) {
+      const result = `${timeList[0]}:${timeList[1]}-${timeList[2]}:${timeList[3]}`;
+      ipcRenderer.send('noonBreakTime', result);
+
+      alert('修改成功');
+    } else {
+      alert('午休时间填写有误');
+    }
+  }
 }

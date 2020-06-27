@@ -21,11 +21,17 @@
       label {
         font-size: 13px;
       }
+      #sitInterval, #standInterval {
+        width: 148px;
+      }
       button {
         margin: 0 10px;
       }
       span {
-        font-size: 12px;
+        font-size: 13px;
+      }
+      .noonBreak input{
+        width: 20px;
       }
     </style>
   </head>
@@ -41,6 +47,11 @@
         <label for="standInterval">设置站立时间：</label>
         <input id='standInterval'/>
         <button id='setStandInterval'>确认</button>
+      </div>
+      <div class='noonBreak'>
+        <span>设置午休时间：</span>
+        <input />&nbsp;:&nbsp;<input />&nbsp;-&nbsp;<input />&nbsp;:&nbsp;<input />
+        <button>确认</button>
       </div>
     </div>
   </body>

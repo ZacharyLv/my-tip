@@ -32,6 +32,24 @@ function createWindow() {
   // configWin.webContents.openDevTools();
 }
 
+// 午休时间
+function isNoonBreakTime() {
+  const [currentHour, currentMin] = currentTime().split(':');
+  const [noonStart, noonEnd] = store.get('noonBreakTime').split('-');
+  const [noonStartHout, noonStartMin] = noonStart.split(':');
+  const [noonEndHout, noonEndMin] = noonEnd.split(':');
+
+  return (
+    (+currentHour >= +noonStartHout && +currentMin >= +noonStartMin) &&
+    (+currentHour <= +noonEndHout && +currentMin <= +noonEndMin)
+  );
+}
+
+// 修改午休时间
+function changeNoonBreakTime(noonBreakTime) {
+  store.set('noonBreakTime', noonBreakTime);
+}
+
 // 开启定时器
 function startInterval() {
   const posture = store.get('posture');
@@ -40,12 +58,15 @@ function startInterval() {
   store.set('beforeTime', currentTime());
 
   timer = setTimeout(() => {
-    const date = new Date();
 
-    new Notification({
-      title: '暖洋想去放风筝',
-      body: `${date.getHours()}点${date.getMinutes()}分\n该${posture === 'sit' ? '站起来' : '坐下'}了`
-    }).show();
+    // 非午休时间才弹框
+    if (!isNoonBreakTime()) {
+      const date = new Date();
+      new Notification({
+        title: '暖洋想去放风筝',
+        body: `${date.getHours()}点${date.getMinutes()}分\n该${posture === 'sit' ? '站起来' : '坐下'}了`
+      }).show();
+    }
 
     store.set('posture', posture === 'sit' ? 'stand' : 'sit');
 
@@ -74,6 +95,7 @@ function getContextMenu() {
   const standTime = store.get('standTime');
   const beforeTime = store.get('beforeTime');
   const postureTime = store.get(posture + 'Time');
+  const nookBreakTime = store.get('noonBreakTime');
 
   const [hour, minute] = beforeTime.split(':');
   const [currentHour, currentMin] = currentTime().split(':');
@@ -94,6 +116,9 @@ function getContextMenu() {
     {
       label: `重新站立 ${standTime} min`,
       click: () => reset('stand')
+    },
+    {
+      label: `午休时间：${nookBreakTime}`,
     },
     {
       label: '设置其他时间',
@@ -128,6 +153,9 @@ function getContextMenu() {
 // 监听页面的回调事件
 ipcMain.on('changeInterval', (event, arg) => {
   changeInterval(arg);
+});
+ipcMain.on('noonBreakTime', (event, arg) => {
+  changeNoonBreakTime(arg);
 });
 
 // 在关闭窗口的时候，保持程序仍然活着

@@ -14,5 +14,9 @@ module.exports = {
   beforeTime: { // 前一次切换姿势的时间
     type: 'string',
     default: ''
+  },
+  noonBreakTime: { // 午休时间
+    type: 'string',
+    default: '12:00-13:30'
   }
 }
