@@ -1,12 +1,50 @@
 const { app, Menu, BrowserWindow, Tray, Notification, ipcMain } = require('electron');
 const schema = require('./schema');
 const Store = require('electron-store');
+const player = require('play-sound')(opts = {});
+const schedule = require('node-schedule');
 const store = new Store({ schema }); // 数据存储对象
 const trayIcon = require.resolve('../images/grassland.png'); // 托盘图标
 
+let audio; // 音乐播放对象
 let timer; // 倒计时的定时器
 let tray; // 右上角托盘菜单
 let configWin; // 配置项窗口对象
+
+// 定时任务
+const runSchedule = () => {
+  // 每天的8点59分0秒，触发晨会的提醒
+  schedule.scheduleJob('0 59 8 * * *',() => {
+
+    playMusic();
+
+    new Notification({
+      title: '暖洋想去放风筝',
+      body: `晨会时间到了`
+    }).show();
+  });
+
+  // 每天的18点0分0秒，触发下班的提醒
+  schedule.scheduleJob('0 0 18 * * *',() => {
+    new Notification({
+      title: '暖洋想去放风筝',
+      body: `下班了，下班了`
+    }).show();
+  });
+}
+
+// 播放音乐
+function playMusic() {
+  let music;
+
+  try {
+    music = require.resolve('../audio/goodmorning.mp3'); // 早上好
+  } catch(e) {}
+
+  if (music) {
+    audio = player.play(music);
+  }
+}
 
 // 获取当前时间
 function currentTime() {
@@ -168,6 +206,11 @@ app.on('window-all-closed', () => {
 // 隐藏docker里的图标
 app.dock.hide();
 
+// 退出应用的时候停止播放音乐
+app.on('before-quit', () => {
+  audio && audio.kill();
+});
+
 app.on('ready', () => {
 
   // 重置时间，并开启定时器
@@ -176,4 +219,7 @@ app.on('ready', () => {
   // 生成系统托盘
   tray = new Tray(trayIcon);
   tray.on('click', () => tray.popUpContextMenu(getContextMenu()));
+
+  // 执行定时任务
+  runSchedule();
 });
