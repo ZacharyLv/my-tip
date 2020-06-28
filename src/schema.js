@@ -18,5 +18,13 @@ module.exports = {
   noonBreakTime: { // 午休时间
     type: 'string',
     default: '12:00-13:30'
+  },
+  morningMeetingTime: { // 晨会时间
+    type: 'string',
+    default: '8:59'
+  },
+  offWorkTime: { // 下班时间
+    type: 'string',
+    default: '18:00'
   }
 }

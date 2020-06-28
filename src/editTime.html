@@ -7,7 +7,7 @@
     <script src='./editTime.js'></script>
     <style>
       body {
-        height: 160px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -21,7 +21,7 @@
       label {
         font-size: 13px;
       }
-      #sitInterval, #standInterval {
+      input {
         width: 148px;
       }
       button {
@@ -51,6 +51,16 @@
       <div class='noonBreak'>
         <span>设置午休时间：</span>
         <input />&nbsp;:&nbsp;<input />&nbsp;-&nbsp;<input />&nbsp;:&nbsp;<input />
+        <button>确认</button>
+      </div>
+      <div class="morningMeeting">
+        <span>设置晨会时间：</span>
+        <input />
+        <button>确认</button>
+      </div>
+      <div class="offWork">
+        <span>设置下班时间：</span>
+        <input />
         <button>确认</button>
       </div>
     </div>

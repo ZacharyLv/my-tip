@@ -57,7 +57,7 @@ function createWindow() {
   // 创建浏览器窗口
   configWin = new BrowserWindow({
     width: 500,
-    height: 200,
+    height: 300,
     webPreferences: {
       nodeIntegration: true
     }
@@ -78,9 +78,9 @@ function isNoonBreakTime() {
   return (cTime >= noonStart && cTime <= noonEnd);
 }
 
-// 修改午休时间
-function changeNoonBreakTime(noonBreakTime) {
-  store.set('noonBreakTime', noonBreakTime);
+// 修改时间
+function changeTime({ key, value }) {
+  store.set(key, value);
 }
 
 // 开启定时器
@@ -128,7 +128,6 @@ function getContextMenu() {
   const standTime = store.get('standTime');
   const beforeTime = store.get('beforeTime');
   const postureTime = store.get(posture + 'Time');
-  const nookBreakTime = store.get('noonBreakTime');
 
   const [hour, minute] = beforeTime.split(':');
   const [currentHour, currentMin] = currentTime().split(':');
@@ -151,10 +150,7 @@ function getContextMenu() {
       click: () => reset('stand')
     },
     {
-      label: `午休时间：${nookBreakTime}`,
-    },
-    {
-      label: '设置其他时间',
+      label: '更多设置',
       click: () => {
         // 新建页面
         if (!configWin) {
@@ -187,8 +183,8 @@ function getContextMenu() {
 ipcMain.on('changeInterval', (event, arg) => {
   changeInterval(arg);
 });
-ipcMain.on('noonBreakTime', (event, arg) => {
-  changeNoonBreakTime(arg);
+ipcMain.on('changeTime', (event, arg) => {
+  changeTime(arg);
 });
 
 // 在关闭窗口的时候，保持程序仍然活着
