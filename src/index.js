@@ -49,7 +49,7 @@ function playMusic() {
 // 获取当前时间
 function currentTime() {
   const date = new Date();
-  return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
 
 // 配置项窗口对象
@@ -72,15 +72,10 @@ function createWindow() {
 
 // 午休时间
 function isNoonBreakTime() {
-  const [currentHour, currentMin] = currentTime().split(':');
+  const currentTime = currentTime();
   const [noonStart, noonEnd] = store.get('noonBreakTime').split('-');
-  const [noonStartHout, noonStartMin] = noonStart.split(':');
-  const [noonEndHout, noonEndMin] = noonEnd.split(':');
 
-  return (
-    (+currentHour >= +noonStartHout && +currentMin >= +noonStartMin) &&
-    (+currentHour <= +noonEndHout && +currentMin <= +noonEndMin)
-  );
+  return (currentTime >= noonStart && currentTime <= noonEnd);
 }
 
 // 修改午休时间
