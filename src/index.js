@@ -72,10 +72,10 @@ function createWindow() {
 
 // 午休时间
 function isNoonBreakTime() {
-  const currentTime = currentTime();
+  const cTime = currentTime();
   const [noonStart, noonEnd] = store.get('noonBreakTime').split('-');
 
-  return (currentTime >= noonStart && currentTime <= noonEnd);
+  return (cTime >= noonStart && cTime <= noonEnd);
 }
 
 // 修改午休时间
