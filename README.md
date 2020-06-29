@@ -11,7 +11,7 @@
 
 弹出提示：  
 
-<img src="https://github.com/ZacharyLv/my-tip/blob/master/images/showNotification.gif" width="50%">
+![弹出提示](https://github.com/ZacharyLv/my-tip/blob/master/images/showNotification.gif)
 
 时间编辑：  
 
