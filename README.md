@@ -7,7 +7,7 @@
 
 软件展示：  
 
-<img src="https://github.com/ZacharyLv/my-tip/blob/master/images/runTomato.gif" width="50%">
+![软件展示](https://github.com/ZacharyLv/my-tip/blob/master/images/runTomato.gif)
 
 弹出提示：  
 
