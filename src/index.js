@@ -10,12 +10,24 @@ let audio; // 音乐播放对象
 let timer; // 倒计时的定时器
 let tray; // 右上角托盘菜单
 let configWin; // 配置项窗口对象
+let morningMeetingJob; // 晨会提醒的定时任务
+let offWorkJob; // 下班的定时任务
 
-// 定时任务
-const runSchedule = () => {
-  // 每天的8点59分0秒，触发晨会的提醒
-  schedule.scheduleJob('0 59 8 * * *',() => {
+// 晨会提醒
+const morningMeetingSchedule = () => {
+  const [hour, min] = store.get('morningMeetingTime').split(':');
+  const disableMorningMeeting = store.get('disableMorningMeeting');
 
+  if (morningMeetingJob) {
+    morningMeetingJob.cancel();
+    morningMeetingJob = null;
+  }
+
+  if (disableMorningMeeting) {
+    return;
+  }
+
+  morningMeetingJob = schedule.scheduleJob(`0 ${+min} ${+hour} * * *`,() => {
     playMusic();
 
     new Notification({
@@ -23,9 +35,23 @@ const runSchedule = () => {
       body: `晨会时间到了`
     }).show();
   });
+}
 
-  // 每天的18点0分0秒，触发下班的提醒
-  schedule.scheduleJob('0 0 18 * * *',() => {
+// 下班提醒
+const offWorkSchedule = () => {
+  const [hour, min] = store.get('offWorkTime').split(':');
+  const disableOffWork = store.get('disableOffWork');
+
+  if (offWorkJob) {
+    offWorkJob.cancel();
+    offWorkJob = null;
+  }
+
+  if (disableOffWork) {
+    return;
+  }
+
+  offWorkJob = schedule.scheduleJob(`0 ${+min} ${+hour} * * *`,() => {
     new Notification({
       title: '暖洋想去放风筝',
       body: `下班了，下班了`
@@ -79,7 +105,7 @@ function isNoonBreakTime() {
 }
 
 // 修改时间
-function changeTime({ key, value }) {
+function changeData({ key, value }) {
   store.set(key, value);
 }
 
@@ -183,8 +209,11 @@ function getContextMenu() {
 ipcMain.on('changeInterval', (event, arg) => {
   changeInterval(arg);
 });
-ipcMain.on('changeTime', (event, arg) => {
-  changeTime(arg);
+ipcMain.on('changeData', (event, arg) => {
+  changeData(arg);
+});
+ipcMain.on('resetSchedule', (event, arg) => {
+  eval(`${arg}()`);
 });
 
 // 在关闭窗口的时候，保持程序仍然活着
@@ -212,5 +241,6 @@ app.on('ready', () => {
   tray.on('click', () => tray.popUpContextMenu(getContextMenu()));
 
   // 执行定时任务
-  runSchedule();
+  morningMeetingSchedule();
+  offWorkSchedule();
 });

@@ -7,13 +7,9 @@
     <script src='./editTime.js'></script>
     <style>
       body {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        padding: 20px 0 0 60px;
       }
-      div > div {
+      div {
         height: 40px;
         display: flex;
         align-items: center;
@@ -23,6 +19,9 @@
       }
       input {
         width: 148px;
+      }
+      input[type='checkbox'] {
+        width: 20px;
       }
       button {
         margin: 0 10px;
@@ -37,32 +36,31 @@
   </head>
   <body>
     <div>
-      <span>最小1分钟，最大60分钟</span>
-      <div>
-        <label for="sitInterval">设置坐下时间：</label>
-        <input id='sitInterval'/>
-        <button id='setSitInterval'>确认</button>
-      </div>
-      <div>
-        <label for="standInterval">设置站立时间：</label>
-        <input id='standInterval'/>
-        <button id='setStandInterval'>确认</button>
-      </div>
-      <div class='noonBreak'>
-        <span>设置午休时间：</span>
-        <input />&nbsp;:&nbsp;<input />&nbsp;-&nbsp;<input />&nbsp;:&nbsp;<input />
-        <button>确认</button>
-      </div>
-      <div class="morningMeeting">
-        <span>设置晨会时间：</span>
-        <input />
-        <button>确认</button>
-      </div>
-      <div class="offWork">
-        <span>设置下班时间：</span>
-        <input />
-        <button>确认</button>
-      </div>
+      <label for="sitInterval">设置坐下时间：</label>
+      <input id='sitInterval'/>
+      <button id='setSitInterval'>确认</button>
+    </div>
+    <div>
+      <label for="standInterval">设置站立时间：</label>
+      <input id='standInterval'/>
+      <button id='setStandInterval'>确认</button>
+    </div>
+    <div class='noonBreak'>
+      <span>设置午休时间：</span>
+      <input />&nbsp;:&nbsp;<input />&nbsp;-&nbsp;<input />&nbsp;:&nbsp;<input />
+      <button>确认</button>
+    </div>
+    <div class="morningMeeting">
+      <span>设置晨会时间：</span>
+      <input />
+      <button>确认</button>
+      <label>禁用提醒<input type="checkbox" id='disableMorningMeeting'/></label>
+    </div>
+    <div class="offWork">
+      <span>设置下班时间：</span>
+      <input />
+      <button>确认</button>
+      <label>禁用提醒<input type="checkbox" id='disableOffWork'/></label>
     </div>
   </body>
 </html>

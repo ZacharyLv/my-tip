@@ -8,6 +8,13 @@ window.onload = () => {
   const noonBreakTime = store.get('noonBreakTime'); // 午休时间
   const morningMeetingTime = store.get('morningMeetingTime'); // 晨会时间
   const offWorkTime = store.get('offWorkTime'); // 下班时间
+  const disableMorningMeeting = store.get('disableMorningMeeting'); // 禁用晨会提醒
+  const disableOffWork = store.get('disableOffWork'); // 禁用下班提醒
+
+  // 验证时间格式
+  function matchTime(time) {
+    return /^((2[0-3])|([0-1][0-9])):[0-5][0-9]$/.test(time);
+  }
 
   function changeInterval(interval, posture) {
     if (!interval) {
@@ -57,7 +64,7 @@ window.onload = () => {
   
       if (timeIsOk) {
         const result = `${timeList[0]}:${timeList[1]}-${timeList[2]}:${timeList[3]}`;
-        ipcRenderer.send('changeTime', { key: 'noonBreakTime', value: result });
+        ipcRenderer.send('changeData', { key: 'noonBreakTime', value: result });
 
         alert('修改成功');
       } else {
@@ -73,8 +80,30 @@ window.onload = () => {
     const btnDom = morningMeeting.querySelector('button');
     inputDom.value = morningMeetingTime;
     btnDom.onclick = () => {
-      ipcRenderer.send('changeTime', { key: 'morningMeetingTime', value: inputDom.value });
+      const [hour, min] = inputDom.value.split(':');
+      const value = [hour.padStart(2, '0'), min.padStart(2, '0')].join(':');
+      if (matchTime(value)) {
+        ipcRenderer.send('changeData', { key: 'morningMeetingTime', value });
+        setTimeout(() => {
+          ipcRenderer.send('resetSchedule', 'morningMeetingSchedule');
+        }, 1000);
+        alert('修改成功');
+      } else {
+        alert('请输入正确的时间');
+      }
+    }
+  }
 
+  // 设置禁用晨会提醒
+  function setDisableMorning() {
+    const disableMorningDom = document.querySelector('#disableMorningMeeting');
+    disableMorningDom.checked = disableMorningMeeting;
+
+    disableMorningDom.onchange = () => {
+      ipcRenderer.send('changeData', { key: 'disableMorningMeeting', value: disableMorningDom.checked });
+      setTimeout(() => {
+        ipcRenderer.send('resetSchedule', 'morningMeetingSchedule');
+      }, 1000);
       alert('修改成功');
     }
   }
@@ -86,8 +115,30 @@ window.onload = () => {
     const btnDom = offWork.querySelector('button');
     inputDom.value = offWorkTime;
     btnDom.onclick = () => {
-      ipcRenderer.send('changeTime', { key: 'offWorkTime', value: inputDom.value });
+      const [hour, min] = inputDom.value.split(':');
+      const value = [hour.padStart(2, '0'), min.padStart(2, '0')].join(':');
+      if (matchTime(value)) {
+        ipcRenderer.send('changeData', { key: 'offWorkTime', value });
+        setTimeout(() => {
+          ipcRenderer.send('resetSchedule', 'offWorkSchedule');
+        }, 1000);
+        alert('修改成功');
+      } else {
+        alert('请输入正确的时间');
+      }
+    }
+  }
 
+  // 设置禁用下班提醒
+  function setDisableOffWork() {
+    const disableOffWorkDom = document.querySelector('#disableOffWork');
+    disableOffWorkDom.checked = disableOffWork;
+
+    disableOffWorkDom.onchange = () => {
+      ipcRenderer.send('changeData', { key: 'disableOffWork', value: disableOffWorkDom.checked });
+      setTimeout(() => {
+        ipcRenderer.send('resetSchedule', 'offWorkSchedule');
+      }, 1000);
       alert('修改成功');
     }
   }
@@ -97,4 +148,6 @@ window.onload = () => {
   noonBreak();
   morningMeeting();
   offWork();
+  setDisableMorning();
+  setDisableOffWork();
 }

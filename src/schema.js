@@ -23,8 +23,16 @@ module.exports = {
     type: 'string',
     default: '8:59'
   },
+  disableMorningMeeting: { // 禁用晨会提醒
+    type: 'boolean',
+    default: false
+  },
   offWorkTime: { // 下班时间
     type: 'string',
     default: '18:00'
+  },
+  disableOffWork: { // 禁用下班提醒
+    type: 'boolean',
+    default: false
   }
 }
