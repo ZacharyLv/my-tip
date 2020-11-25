@@ -34,5 +34,13 @@ module.exports = {
   disableOffWork: { // 禁用下班提醒
     type: 'boolean',
     default: false
+  },
+  learnWordTimeLength: { // 单词提示的时间间隔
+    type: 'number',
+    default: 10, // 单位分钟
+  },
+  word: { // 单词本
+    type: 'string',
+    default: '[]'
   }
 }

@@ -10,6 +10,7 @@ window.onload = () => {
   const offWorkTime = store.get('offWorkTime'); // 下班时间
   const disableMorningMeeting = store.get('disableMorningMeeting'); // 禁用晨会提醒
   const disableOffWork = store.get('disableOffWork'); // 禁用下班提醒
+  const learnWordTimeLength = store.get('learnWordTimeLength'); // 单词提示的时间间隔
 
   // 验证时间格式
   function matchTime(time) {
@@ -143,6 +144,21 @@ window.onload = () => {
     }
   }
 
+  // 单词提示间隔
+  function learnWordTimeLengthFun() {
+    const dom = document.querySelector('#learnWordTimeLength');
+    dom.value = learnWordTimeLength;
+    document.querySelector('#setLearnWordTimeLength').onclick = () => {
+      const interval = Number(dom.value);
+      if (interval > 0) {
+        ipcRenderer.send('changeData', { key: 'learnWordTimeLength', value: interval });
+        alert('修改成功');
+      } else {
+        alert('请输入有效数字');
+      }
+    };
+  }
+
   sitInterval();
   standInterval();
   noonBreak();
@@ -150,4 +166,5 @@ window.onload = () => {
   offWork();
   setDisableMorning();
   setDisableOffWork();
+  learnWordTimeLengthFun();
 }
